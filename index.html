@@ -344,16 +344,20 @@
   .nav-item .ecg{ fill:none; stroke:var(--paper-dim); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; transition:stroke .16s; }
   .nav-item:hover .ecg, .nav-item.active .ecg{ stroke:var(--brass); }
 
-  /* le trace se redessine en boucle sur l'entree survolee ou active */
-  .nav-item .ecg{ stroke-dasharray:var(--len,60) var(--len,60); stroke-dashoffset:0; }
+  /* Le trace se redessine en boucle sur l'entree survolee ou active.
+     Longueur fixee en dur (40) plutot que mesuree en JS : les icones font
+     toutes ~26x14, donc leur trace mesure entre 26 et 40 unites. Une valeur
+     fixe evite toute dependance a getTotalLength, dont le resultat variait
+     selon le navigateur et faisait disparaitre le trait sur certains PC. */
+  .nav-item .ecg{ stroke-dasharray:40 40; stroke-dashoffset:0; }
   .nav-item:hover .ecg,
   .nav-item.active .ecg{ animation:ecgSweep 1.9s linear infinite; }
   @keyframes ecgSweep{
-    from { stroke-dashoffset:var(--len,60); }
-    to   { stroke-dashoffset:calc(var(--len,60) * -1); }
+    from { stroke-dashoffset:40; }
+    to   { stroke-dashoffset:-40; }
   }
 
-  /* le point de mesure, cale sur le meme rythme */
+  /* le point suit le meme rythme */
   .nav-item .ecg-dot{ opacity:0; fill:var(--brass); }
   .nav-item:hover .ecg-dot,
   .nav-item.active .ecg-dot{ animation:ecgDot 1.9s linear infinite; }
@@ -5361,18 +5365,9 @@ addEventListener('keydown',e=>{ if(e.key==='Escape') navOpen(false); });
    Mesurée après un double rAF : certains moteurs (Edge notamment) peuvent
    renvoyer une longueur fausse si on interroge le tracé avant que la page
    ait fini sa mise en page initiale. */
-function measureNavEcgs(){
-  navEl.querySelectorAll('.nav-item .ecg').forEach(path=>{
-    try{
-      const len = Math.ceil(path.getTotalLength());
-      if(len > 0) path.style.setProperty('--len', len);
-    }catch(e){ /* getTotalLength indisponible : la valeur par defaut s'applique */ }
-  });
-}
-requestAnimationFrame(()=>requestAnimationFrame(measureNavEcgs));
-/* filet de sécurité : si la mise en page a changé (police chargée, zoom, etc.)
-   on remesure à l'ouverture du menu, qui ne coûte rien et corrige tout résidu. */
-navBtn.addEventListener('click', ()=>requestAnimationFrame(measureNavEcgs));
+/* La longueur des traces du menu est desormais fixee en CSS (stroke-dasharray:40).
+   Plus aucune mesure JS n'est necessaire : getTotalLength renvoyait des valeurs
+   incoherentes selon le navigateur, ce qui faisait disparaitre le trait. */
 
 /* =====================================================================
    NAVIGATION PAR PANNEAUX
