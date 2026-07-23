@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="168" viewBox="0 0 760 168" role="img" aria-label="WildPulse — Observatoire du vivant">
+  <defs>
+    <linearGradient id="wpFade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C2612E"/>
+      <stop offset="52%" stop-color="#C2612E"/>
+      <stop offset="86%" stop-color="#C2612E" stop-opacity=".42"/>
+      <stop offset="100%" stop-color="#C2612E" stop-opacity=".10"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 66 H120 L134 66 L143 47 L152 66 L162 66 L171 37 L180 66 L190 66 L199 45 L208 66 L226 66 C244 66 246 88 260 88 C277 88 279 28 296 28 C311 28 313 66 330 66 H372 L386 66 L395 54 L404 66 L419 66 L428 59 L437 66 H520 L532 66 L539 62 L546 66 H626 L634 66 L638 64.5 L642 66 H742"
+        fill="none" stroke="url(#wpFade)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="171" cy="78" rx="15" ry="9.6" fill="#C2612E" opacity=".92"/>
+  <circle cx="296" cy="28" r="5.6" fill="none" stroke="#C2612E" stroke-width="2" opacity=".85">
+    <animateTransform attributeName="transform" type="scale" additive="sum" values="1;3.4;3.4" dur="1.9s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".85;0;0" dur="1.9s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="296" cy="28" r="5.6" fill="#EFE6D2"/>
+  <circle cx="296" cy="28" r="5.6" fill="none" stroke="#C2612E" stroke-width="2.1"/>
+  <text x="18" y="134" font-family="Newsreader, Georgia, serif" font-size="46" fill="#EFE6D2" letter-spacing="-0.8"><tspan font-weight="600">Wild</tspan><tspan font-weight="400" opacity=".82">Pulse</tspan></text>
+  <text x="330" y="134" font-family="IBM Plex Mono, monospace" font-size="12" fill="#C9974C" letter-spacing="4.5">OBSERVATOIRE DU VIVANT</text>
+</svg>

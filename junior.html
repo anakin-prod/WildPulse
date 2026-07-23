@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WildPulse Junior — Le carnet de l'explorateur</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='20' fill='%23F7EFDD'/%3E%3Cg fill='none' stroke='%23D4671F' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 52 L28 52 L34 38 L40 52 L48 52 L54 32 L60 52 L68 52 L74 38 L80 52'/%3E%3C/g%3E%3Cellipse cx='49' cy='66' rx='12' ry='7.5' fill='%23D4671F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7EFDD; --paper2:#FDF8EC; --paper3:#EFE3C9;
+    --ink:#2E2418; --ink-soft:#6B5B44; --line:#D9C9A8;
+    --orange:#D4671F; --orange-dk:#A64D13;
+    --leaf:#4A7C42; --sky:#3D7A96; --sun:#E0A32E; --berry:#9B4368;
+    --gold:#C9973F;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:'Nunito',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(224,163,46,.10), transparent 42%),
+      radial-gradient(circle at 88% 20%, rgba(74,124,66,.09), transparent 45%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='7' cy='11' r='.8' fill='%23D9C9A8' opacity='.5'/%3E%3Ccircle cx='38' cy='29' r='.7' fill='%23D9C9A8' opacity='.4'/%3E%3Ccircle cx='21' cy='47' r='.9' fill='%23D9C9A8' opacity='.45'/%3E%3C/svg%3E");
+    padding-bottom:70px;
+  }
+  ::selection{ background:var(--sun); color:var(--ink); }
+  :focus-visible{ outline:3px solid var(--orange); outline-offset:3px; border-radius:8px; }
+  @media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 20px; }
+
+  /* ---------- En-tête ---------- */
+  header{ padding:26px 20px 22px; }
+  .brandrow{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand svg{ display:block; flex:none; }
+  .brand-txt b{ display:block; font-family:'Fraunces',serif; font-weight:900; font-size:24px; line-height:1; letter-spacing:-.5px; }
+  .brand-txt b i{ font-style:normal; color:var(--orange); }
+  .brand-txt span{ font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); }
+
+  /* jauge d'explorateur */
+  .rank{ display:flex; align-items:center; gap:11px; background:var(--paper2); border:2px solid var(--line); border-radius:16px; padding:9px 14px; }
+  .rank-badge{
+    width:38px; height:38px; border-radius:50%; background:var(--sun); flex:none;
+    display:flex; align-items:center; justify-content:center; font-size:19px;
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.12);
+  }
+  .rank-txt b{ display:block; font-family:'Fraunces',serif; font-weight:700; font-size:14.5px; line-height:1.2; }
+  .rank-bar{ width:96px; height:7px; background:var(--paper3); border-radius:4px; margin-top:5px; overflow:hidden; }
+  .rank-bar i{ display:block; height:100%; background:var(--leaf); border-radius:4px; transition:width .5s cubic-bezier(.34,1.4,.64,1); }
+  .rank-txt span{ font-size:11px; color:var(--ink-soft); font-weight:600; }
+
+  h1{
+    font-family:'Fraunces',serif; font-weight:900; font-size:clamp(30px,5.4vw,50px);
+    line-height:1.04; letter-spacing:-1px; margin-top:26px; max-width:15ch;
+  }
+  h1 em{ font-style:normal; color:var(--orange); position:relative; white-space:nowrap; }
+  h1 em::after{
+    content:''; position:absolute; left:0; right:0; bottom:2px; height:7px; z-index:-1;
+    background:var(--sun); opacity:.42; border-radius:4px;
+  }
+  .lede{ font-size:16px; line-height:1.62; color:var(--ink-soft); max-width:52ch; margin-top:13px; font-weight:600; }
+
+  /* ---------- Sélecteur d'âge ---------- */
+  .ages{ display:flex; gap:9px; margin-top:22px; flex-wrap:wrap; align-items:center; }
+  .ages-lbl{ font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-right:3px; }
+  .age{
+    font-family:'Nunito'; font-size:14px; font-weight:800; color:var(--ink-soft);
+    background:var(--paper2); border:2px solid var(--line); padding:9px 17px; border-radius:22px; cursor:pointer;
+    transition:transform .16s, border-color .16s, background .16s, color .16s;
+  }
+  .age:hover{ transform:translateY(-2px); border-color:var(--orange); }
+  .age.on{ background:var(--orange); border-color:var(--orange); color:#fff; }
+
+  /* ---------- Barre de progression de collection ---------- */
+  .progress{
+    margin-top:30px; background:var(--paper2); border:2px solid var(--line); border-radius:20px;
+    padding:18px 20px; display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+  }
+  .prog-num{ font-family:'Fraunces',serif; font-weight:900; font-size:34px; line-height:1; color:var(--orange); }
+  .prog-num small{ font-size:17px; color:var(--ink-soft); }
+  .prog-txt{ flex:1; min-width:180px; }
+  .prog-txt b{ display:block; font-family:'Fraunces',serif; font-size:16px; font-weight:700; }
+  .prog-txt span{ font-size:13px; color:var(--ink-soft); font-weight:600; }
+  .prog-track{ width:100%; height:11px; background:var(--paper3); border-radius:6px; margin-top:8px; overflow:hidden; }
+  .prog-track i{ display:block; height:100%; border-radius:6px; background:linear-gradient(90deg,var(--leaf),var(--sun)); transition:width .6s cubic-bezier(.34,1.4,.64,1); }
+
+  /* ---------- Grille de cartes ---------- */
+  .sec-title{ display:flex; align-items:center; gap:13px; margin:40px 0 16px; }
+  .sec-title h2{ font-family:'Fraunces',serif; font-weight:900; font-size:23px; letter-spacing:-.4px; }
+  .sec-title i{ flex:1; height:3px; background:repeating-linear-gradient(90deg,var(--line) 0 9px,transparent 9px 16px); border-radius:2px; }
+
+  .cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:15px; }
+  .card{
+    position:relative; aspect-ratio:3/4.35; border-radius:18px; cursor:pointer;
+    border:3px solid var(--line); background:var(--paper2); overflow:hidden;
+    transition:transform .22s cubic-bezier(.34,1.4,.64,1), box-shadow .22s, border-color .22s;
+    display:flex; flex-direction:column;
+  }
+  .card:hover{ transform:translateY(-5px) rotate(-.7deg); box-shadow:0 14px 26px -12px rgba(46,36,24,.4); }
+  .card.locked{ background:var(--paper3); border-style:dashed; border-color:#C6B491; }
+  .card.locked:hover{ transform:translateY(-3px); }
+  .card.found{ border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset; }
+
+  .card-art{ flex:1; position:relative; display:flex; align-items:center; justify-content:center; padding:10px; }
+  .card-art svg{ width:100%; height:100%; }
+  .card-rare{
+    position:absolute; top:9px; right:9px; font-size:9.5px; font-weight:800; letter-spacing:.09em;
+    text-transform:uppercase; padding:3px 8px; border-radius:11px; color:#fff;
+  }
+  .card-foot{ padding:9px 12px 12px; border-top:2px dashed var(--line); background:var(--paper2); }
+  .card-foot b{ display:block; font-family:'Fraunces',serif; font-weight:700; font-size:14.5px; line-height:1.18; }
+  .card-foot span{ font-size:11px; color:var(--ink-soft); font-weight:600; }
+
+  .lock-face{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; height:100%; color:#A8946F; }
+  .lock-face .q{ font-family:'Fraunces',serif; font-size:46px; font-weight:900; }
+  .lock-face span{ font-size:11.5px; font-weight:700; text-align:center; padding:0 12px; line-height:1.4; }
+
+  /* ---------- Fiche détaillée ---------- */
+  .sheet-veil{
+    position:fixed; inset:0; background:rgba(46,36,24,.55); z-index:70; opacity:0; pointer-events:none;
+    transition:opacity .26s; backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:18px;
+  }
+  .sheet-veil.on{ opacity:1; pointer-events:auto; }
+  .sheet{
+    background:var(--paper2); border:4px solid var(--ink); border-radius:24px; max-width:440px; width:100%;
+    max-height:92vh; overflow-y:auto; transform:scale(.9) rotate(-1deg); transition:transform .3s cubic-bezier(.34,1.5,.64,1);
+    box-shadow:0 22px 50px -18px rgba(0,0,0,.55);
+  }
+  .sheet-veil.on .sheet{ transform:scale(1) rotate(0); }
+  .sheet-art{ height:190px; display:flex; align-items:center; justify-content:center; border-bottom:4px solid var(--ink); position:relative; }
+  .sheet-art svg{ width:76%; height:76%; }
+  .sheet-close{
+    position:absolute; top:11px; right:11px; width:34px; height:34px; border-radius:50%;
+    background:var(--paper2); border:3px solid var(--ink); font-size:15px; cursor:pointer; font-weight:800;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  .sheet-body{ padding:19px 21px 23px; }
+  .sheet-body h3{ font-family:'Fraunces',serif; font-weight:900; font-size:25px; line-height:1.1; }
+  .sheet-sci{ font-size:12.5px; color:var(--ink-soft); font-weight:700; font-style:italic; margin-top:2px; }
+  .sheet-txt{ font-size:14.5px; line-height:1.65; margin-top:13px; font-weight:600; color:#4A3D2C; }
+  .sheet-stats{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:16px; }
+  .sstat{ background:var(--paper3); border-radius:12px; padding:10px 12px; }
+  .sstat b{ display:block; font-family:'Fraunces',serif; font-weight:700; font-size:16px; }
+  .sstat span{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); }
+  .sheet-wow{
+    margin-top:15px; background:var(--sun); border-radius:14px; padding:13px 15px; color:var(--ink);
+    box-shadow:inset 0 -4px 0 rgba(0,0,0,.10);
+  }
+  .sheet-wow b{ display:block; font-family:'Fraunces',serif; font-weight:900; font-size:13px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+  .sheet-wow p{ font-size:14px; line-height:1.55; font-weight:700; }
+
+  /* ---------- Trouver une carte ---------- */
+  .finder{
+    margin-top:36px; background:var(--paper2); border:3px dashed var(--line); border-radius:22px;
+    padding:24px 22px; text-align:center;
+  }
+  .finder h3{ font-family:'Fraunces',serif; font-weight:900; font-size:20px; }
+  .finder p{ font-size:14px; color:var(--ink-soft); font-weight:600; margin-top:7px; max-width:46ch; margin-inline:auto; line-height:1.6; }
+  .big-btn{
+    margin-top:16px; font-family:'Fraunces',serif; font-weight:900; font-size:17px;
+    background:var(--orange); color:#fff; border:0; border-radius:16px; padding:15px 32px; cursor:pointer;
+    box-shadow:0 5px 0 var(--orange-dk); transition:transform .13s, box-shadow .13s;
+  }
+  .big-btn:active{ transform:translateY(4px); box-shadow:0 1px 0 var(--orange-dk); }
+  .big-btn:disabled{ background:#BFB49C; box-shadow:0 5px 0 #A2957C; cursor:default; }
+
+  /* célébration */
+  .pop{ position:fixed; inset:0; pointer-events:none; z-index:80; overflow:hidden; }
+  .confetti{ position:absolute; width:9px; height:14px; border-radius:2px; animation:fall 1.5s ease-in forwards; }
+  @keyframes fall{ to{ transform:translateY(105vh) rotate(560deg); opacity:0; } }
+
+  footer{ margin-top:46px; padding-top:22px; border-top:3px solid var(--line); }
+  footer p{ font-size:12.5px; color:var(--ink-soft); font-weight:600; line-height:1.7; max-width:62ch; }
+  footer a{ color:var(--orange); font-weight:800; text-decoration:none; border-bottom:2px solid rgba(212,103,31,.35); }
+
+  /* ---------- Quiz ---------- */
+  .quiz{
+    margin-top:36px; background:var(--paper2); border:3px solid var(--line); border-radius:22px;
+    padding:24px 22px; position:relative; overflow:hidden;
+  }
+  .quiz.danger{ border-color:var(--berry); }
+  .quiz-top{ display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px; }
+  .streak{ display:flex; align-items:center; gap:7px; }
+  .streak-lbl{ font-size:11.5px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-soft); }
+  .hearts{ display:flex; gap:4px; }
+  .heart{ font-size:18px; line-height:1; transition:transform .25s, opacity .25s; }
+  .heart.gone{ opacity:.24; transform:scale(.8); }
+  .heart.shake{ animation:shake .45s; }
+  @keyframes shake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+  .combo{ font-family:'Fraunces',serif; font-weight:900; font-size:14px; color:var(--leaf); }
+  .combo.hot{ color:var(--orange); }
+
+  .q-card{ text-align:center; }
+  .q-art{ width:96px; height:96px; margin:0 auto 12px; }
+  .q-art svg{ width:100%; height:100%; }
+  .q-ask{ font-family:'Fraunces',serif; font-weight:900; font-size:clamp(18px,3.4vw,23px); line-height:1.3; max-width:24ch; margin:0 auto; }
+  .q-hint{ font-size:13px; color:var(--ink-soft); font-weight:700; margin-top:7px; }
+
+  .q-opts{ display:grid; gap:10px; margin-top:19px; max-width:520px; margin-inline:auto; }
+  @media (min-width:560px){ .q-opts.two{ grid-template-columns:1fr 1fr; } }
+  .opt{
+    font-family:'Nunito'; font-size:15.5px; font-weight:800; color:var(--ink);
+    background:var(--paper); border:3px solid var(--line); border-radius:15px;
+    padding:15px 16px; cursor:pointer; text-align:left; line-height:1.35;
+    transition:transform .14s, border-color .16s, background .16s;
+    display:flex; align-items:center; gap:11px;
+  }
+  .opt:hover:not(:disabled){ transform:translateY(-3px); border-color:var(--orange); }
+  .opt:disabled{ cursor:default; }
+  .opt .mk{
+    flex:none; width:27px; height:27px; border-radius:50%; background:var(--paper3);
+    display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:900;
+  }
+  .opt.good{ background:#DFF0D8; border-color:var(--leaf); }
+  .opt.good .mk{ background:var(--leaf); color:#fff; }
+  .opt.bad{ background:#F6DDE2; border-color:var(--berry); }
+  .opt.bad .mk{ background:var(--berry); color:#fff; }
+
+  .q-verdict{
+    margin-top:16px; border-radius:15px; padding:14px 17px; text-align:left;
+    max-width:520px; margin-inline:auto; animation:pop .3s cubic-bezier(.34,1.5,.64,1);
+  }
+  @keyframes pop{ from{ transform:scale(.94); opacity:0 } to{ transform:scale(1); opacity:1 } }
+  .q-verdict.win{ background:#DFF0D8; }
+  .q-verdict.lose{ background:#F6DDE2; }
+  .q-verdict b{ display:block; font-family:'Fraunces',serif; font-weight:900; font-size:16px; margin-bottom:5px; }
+  .q-verdict p{ font-size:14px; font-weight:700; line-height:1.55; color:#4A3D2C; }
+
+  .reward{
+    margin-top:14px; display:flex; align-items:center; gap:13px; justify-content:center;
+    background:var(--sun); border-radius:15px; padding:13px 16px; max-width:520px; margin-inline:auto;
+    box-shadow:inset 0 -4px 0 rgba(0,0,0,.10);
+  }
+  .reward svg{ width:44px; height:44px; flex:none; }
+  .reward-txt b{ display:block; font-family:'Fraunces',serif; font-weight:900; font-size:15px; }
+  .reward-txt span{ font-size:12.5px; font-weight:700; }
+
+  .lost-note{
+    margin-top:13px; background:#F6DDE2; border-radius:15px; padding:13px 16px;
+    max-width:520px; margin-inline:auto; display:flex; align-items:center; gap:12px;
+  }
+  .lost-note svg{ width:40px; height:40px; flex:none; opacity:.55; }
+  .lost-note div b{ display:block; font-family:'Fraunces',serif; font-weight:900; font-size:14.5px; }
+  .lost-note div span{ font-size:12.5px; font-weight:700; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brandrow">
+      <div class="brand">
+        <svg width="46" height="46" viewBox="0 0 96 96" aria-label="WildPulse Junior">
+          <rect width="96" height="96" rx="22" fill="#FDF8EC" stroke="#2E2418" stroke-width="4"/>
+          <g fill="none" stroke="#D4671F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 52 H25 L31 40 L37 52 L43 52 L49 32 L55 52 L61 52 L67 40 L73 52 H81"/>
+          </g>
+          <ellipse cx="49" cy="66" rx="12" ry="7.5" fill="#D4671F"/>
+        </svg>
+        <span class="brand-txt">
+          <b>Wild<i>Pulse</i></b>
+          <span>Junior</span>
+        </span>
+      </div>
+      <a href="index.html" style="font-size:12.5px;font-weight:800;color:var(--ink-soft);text-decoration:none;border-bottom:2px solid var(--line);padding-bottom:2px">← Version complète</a>
+      <div class="rank">
+        <span class="rank-badge" id="rankIcon">🔍</span>
+        <span class="rank-txt">
+          <b id="rankName">Apprenti</b>
+          <span class="rank-bar"><i id="rankBar" style="width:0%"></i></span>
+          <span id="rankNext">Trouve 3 cartes pour passer Pisteur</span>
+        </span>
+      </div>
+    </div>
+
+    <h1>Deviens un <em>explorateur</em> du monde sauvage</h1>
+    <p class="lede">Réponds bien à la question et l'animal rejoint ton carnet. Trompe-toi trois fois de suite, et une carte s'échappe dans la nature.</p>
+
+    <div class="ages">
+      <span class="ages-lbl">Je lis</span>
+      <button class="age on" data-age="small">Pas encore bien</button>
+      <button class="age" data-age="big">Très bien</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="progress">
+    <span class="prog-num"><span id="pgFound">0</span><small>/<span id="pgTotal">10</span></small></span>
+    <span class="prog-txt">
+      <b>Ton carnet d'explorateur</b>
+      <span id="pgMsg">Ouvre ta première carte pour commencer !</span>
+      <span class="prog-track"><i id="pgBar" style="width:0%"></i></span>
+    </span>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <div class="quiz-top">
+      <span class="streak">
+        <span class="streak-lbl">Tes vies</span>
+        <span class="hearts" id="hearts"></span>
+      </span>
+      <span class="combo" id="combo"></span>
+    </div>
+    <div id="quizBody"></div>
+  </div>
+
+  <div class="sec-title"><h2>Mon carnet</h2><i></i></div>
+  <div class="cards" id="cards"></div>
+
+  <footer>
+    <p id="footNote">
+      Les informations viennent de l'<a href="https://www.iucnredlist.org" target="_blank" rel="noopener">UICN</a>,
+      les scientifiques qui surveillent les animaux du monde entier. Les dessins sont originaux.
+    </p>
+  </footer>
+</div>
+
+<div class="sheet-veil" id="sheetVeil">
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetName"></div>
+</div>
+<div class="pop" id="pop"></div>
+
+<script>
+/* =====================================================================
+   WILDPULSE JUNIOR — cartes à collectionner
+   Deux niveaux de lecture : "small" (3-6 ans, phrases courtes, gros mots)
+   et "big" (7-10 ans, plus de détail et de vocabulaire).
+   Illustrations SVG originales, dessinées à la main — pas de banque d'images.
+   ===================================================================== */
+
+const RARITY = {
+  common:{ lbl:'Commun', col:'#4A7C42' },
+  rare:{ lbl:'Rare', col:'#3D7A96' },
+  epic:{ lbl:'Très rare', col:'#9B4368' },
+  legend:{ lbl:'Légendaire', col:'#C9973F' },
+};
+
+const ANIMALS = [
+  { id:'renard', name:'Renard roux', sci:'Vulpes vulpes', rarity:'common', color:'#D4671F',
+    small:"Le renard a un nez très puissant. Il entend même les souris qui marchent sous la neige !",
+    big:"Le renard roux entend une souris bouger sous 30 centimètres de neige. Il saute alors en l'air et plonge la tête la première pour l'attraper. Sa queue touffue lui sert de couverture quand il dort.",
+    stats:[['7 kg','Son poids'],['50 km/h','Sa course']],
+    wow:"Il peut sentir un repas caché sous la terre !", habitat:'Forêts et villes' },
+
+  { id:'hibou', name:'Chouette effraie', sci:'Tyto alba', rarity:'common', color:'#C9973F',
+    small:"La chouette vole sans faire de bruit. Ses plumes sont toutes douces !",
+    big:"Ses plumes ont un bord en forme de peigne qui casse le bruit du vent. Elle vole si silencieusement que les souris ne l'entendent jamais arriver. Son visage en forme de cœur récolte les sons comme une antenne.",
+    stats:[['0 bruit','Son vol'],['3 souris','Par nuit']],
+    wow:"Elle chasse dans le noir complet, avec ses oreilles !", habitat:'Granges et champs' },
+
+  { id:'lynx', name:'Lynx boréal', sci:'Lynx lynx', rarity:'rare', color:'#B8873C',
+    small:"Le lynx a des pinceaux de poils sur les oreilles. Ils l'aident à mieux entendre !",
+    big:"Les touffes noires sur ses oreilles fonctionnent comme des antennes : elles captent les sons et l'aident à repérer une proie cachée. Ses grosses pattes s'écartent dans la neige comme des raquettes.",
+    stats:[['25 kg','Son poids'],['20 ans','Son âge max']],
+    wow:"Ses pattes sont des raquettes à neige naturelles !", habitat:'Grandes forêts froides' },
+
+  { id:'loutre', name:'Loutre de mer', sci:'Enhydra lutris', rarity:'rare', color:'#8A6B4A',
+    small:"La loutre se tient la main pour dormir. Comme ça, elle ne part pas au loin !",
+    big:"Pour ne pas dériver pendant leur sommeil, les loutres de mer se tiennent les pattes ou s'enroulent dans des algues. Elles cassent aussi les coquillages avec une pierre posée sur leur ventre : c'est un des rares animaux à utiliser un outil.",
+    stats:[['1 M','Poils au cm²'],['5 min','Sous l\u2019eau']],
+    wow:"C'est l'animal avec le plus de poils au monde !", habitat:'Côtes du Pacifique' },
+
+  { id:'pangolin', name:'Pangolin', sci:'Manis', rarity:'epic', color:'#9A7B4F',
+    small:"Le pangolin est couvert d'écailles. Quand il a peur, il se roule en boule !",
+    big:"C'est le seul mammifère couvert d'écailles. En cas de danger, il se roule en boule si serrée qu'un lion ne peut pas l'ouvrir. Sa langue est plus longue que son corps et il gobe jusqu'à 70 millions de fourmis par an.",
+    stats:[['40 cm','Sa langue'],['70 M','Fourmis / an']],
+    wow:"Sa langue est plus longue que tout son corps !", habitat:'Afrique et Asie' },
+
+  { id:'axolotl', name:'Axolotl', sci:'Ambystoma mexicanum', rarity:'epic', color:'#D98BA8',
+    small:"L'axolotl peut refaire pousser ses pattes. Comme par magie !",
+    big:"Si l'axolotl perd une patte, elle repousse entièrement en quelques semaines — avec les os, les muscles et les nerfs. Il peut même réparer une partie de son cœur ou de son cerveau. Les scientifiques l'étudient beaucoup pour ça.",
+    stats:[['6 mois','Pour repousser'],['15 ans','Son âge max']],
+    wow:"Il peut réparer son propre cœur !", habitat:'Un seul lac au Mexique' },
+
+  { id:'vaquita', name:'Vaquita', sci:'Phocoena sinus', rarity:'legend', color:'#5E7F94',
+    small:"Le vaquita est un tout petit dauphin. Il en reste très très peu.",
+    big:"C'est le plus petit dauphin du monde, avec des cernes noirs autour des yeux. Il n'en reste qu'une dizaine, tous dans un petit coin de mer au Mexique. Ils se prennent dans les filets de pêche posés pour un autre poisson.",
+    stats:[['1,5 m','Sa taille'],['~10','Il en reste']],
+    wow:"Il en reste moins que de doigts sur tes deux mains.", habitat:'Golfe de Californie' },
+
+  { id:'kakapo', name:'Kakapo', sci:'Strigops habroptilus', rarity:'legend', color:'#6B8F3C',
+    small:"Le kakapo est un perroquet qui ne vole pas. Il monte aux arbres à pied !",
+    big:"C'est le seul perroquet du monde qui ne sait pas voler. Il grimpe aux arbres avec son bec et ses pattes, puis se laisse tomber en planant. Chaque kakapo vivant a un nom et une équipe de scientifiques qui veille sur lui.",
+    stats:[['4 kg','Le plus lourd'],['90 ans','Son âge max']],
+    wow:"Chaque kakapo au monde a un prénom !", habitat:'Îles de Nouvelle-Zélande' },
+
+  { id:'tortue', name:'Tortue luth', sci:'Dermochelys coriacea', rarity:'rare', color:'#4A5C6B',
+    small:"La tortue luth nage très très loin. Elle traverse tout l'océan !",
+    big:"Elle traverse des océans entiers, jusqu'à 16 000 kilomètres, pour retourner pondre sur la plage où elle est née. Sa carapace n'est pas dure comme les autres tortues : elle est souple, comme du cuir épais.",
+    stats:[['700 kg','Son poids'],['1 200 m','Sa plongée']],
+    wow:"Elle retrouve sa plage de naissance après 20 ans !", habitat:'Tous les océans' },
+
+  { id:'abeille', name:'Abeille sauvage', sci:'Anthophila', rarity:'common', color:'#E0A32E',
+    small:"L'abeille danse pour dire aux copines où sont les fleurs !",
+    big:"Quand une abeille trouve des fleurs, elle rentre et danse en forme de huit. L'angle de sa danse indique la direction par rapport au soleil, et sa durée indique la distance. C'est un vrai langage.",
+    stats:[['1 500','Fleurs par jour'],['8 km','Sa distance']],
+    wow:"Elle explique le chemin en dansant !", habitat:'Partout où il y a des fleurs' },
+];
+
+
+/* =====================================================================
+   BANQUE DE QUESTIONS
+   Chaque question est liée à un animal : bien répondre le débloque.
+   Deux niveaux : "small" (3-6 ans, 2 choix, formulation simple)
+   et "big" (7-10 ans, 3 choix, vocabulaire plus riche).
+   ===================================================================== */
+const QUESTIONS = {
+  renard:[
+    { lvl:'small', ask:'Comment le renard trouve-t-il les souris sous la neige ?',
+      opts:['Avec ses oreilles','Avec ses yeux'], good:0,
+      why:'Il entend les souris marcher sous la neige, puis il saute et plonge la tête la première !' },
+    { lvl:'big', ask:'Le renard repère une souris sous 30 cm de neige. Comment fait-il ?',
+      opts:['Il l’entend bouger','Il la voit à travers','Il sent son odeur'], good:0,
+      why:'Son ouïe est si fine qu’il localise le bruit exact, puis plonge la tête la première pour l’attraper.' },
+  ],
+  hibou:[
+    { lvl:'small', ask:'Pourquoi la chouette ne fait-elle aucun bruit en volant ?',
+      opts:['Ses plumes sont douces','Elle vole très lentement'], good:0,
+      why:'Le bord de ses plumes casse le bruit du vent. Les souris ne l’entendent jamais arriver !' },
+    { lvl:'big', ask:'À quoi sert le visage en forme de cœur de la chouette effraie ?',
+      opts:['À récolter les sons','À se camoufler','À effrayer les prédateurs'], good:0,
+      why:'Son disque facial fonctionne comme une antenne parabolique et concentre les sons vers ses oreilles.' },
+  ],
+  lynx:[
+    { lvl:'small', ask:'À quoi servent les poils sur les oreilles du lynx ?',
+      opts:['À mieux entendre','À faire joli'], good:0,
+      why:'Ces touffes noires captent les sons, comme de petites antennes !' },
+    { lvl:'big', ask:'Pourquoi le lynx ne s’enfonce-t-il pas dans la neige profonde ?',
+      opts:['Ses pattes s’écartent','Il est très léger','Il saute au-dessus'], good:0,
+      why:'Ses larges pattes s’écartent en marchant et répartissent son poids, comme des raquettes à neige.' },
+  ],
+  loutre:[
+    { lvl:'small', ask:'Pourquoi les loutres se tiennent-elles la patte pour dormir ?',
+      opts:['Pour ne pas partir au loin','Parce qu’elles ont froid'], good:0,
+      why:'En se tenant, elles ne dérivent pas pendant leur sommeil et restent ensemble !' },
+    { lvl:'big', ask:'La loutre de mer fait partie des rares animaux qui utilisent un outil. Lequel ?',
+      opts:['Une pierre','Un bâton','Un coquillage vide'], good:0,
+      why:'Elle pose une pierre sur son ventre et frappe les coquillages dessus pour les ouvrir.' },
+  ],
+  pangolin:[
+    { lvl:'small', ask:'Que fait le pangolin quand il a peur ?',
+      opts:['Il se roule en boule','Il court très vite'], good:0,
+      why:'Il se roule en boule si serrée qu’un lion n’arrive pas à l’ouvrir !' },
+    { lvl:'big', ask:'Qu’est-ce qui rend le pangolin unique parmi les mammifères ?',
+      opts:['Il est couvert d’écailles','Il pond des œufs','Il vit sous l’eau'], good:0,
+      why:'C’est le seul mammifère au monde recouvert d’écailles. Sa langue est plus longue que son corps.' },
+  ],
+  axolotl:[
+    { lvl:'small', ask:'Que se passe-t-il si l’axolotl perd une patte ?',
+      opts:['Elle repousse','Elle ne repousse pas'], good:0,
+      why:'Sa patte repousse entièrement en quelques semaines, avec les os et les muscles !' },
+    { lvl:'big', ask:'Pourquoi les scientifiques étudient-ils autant l’axolotl ?',
+      opts:['Il régénère ses organes','Il vit très longtemps','Il change de couleur'], good:0,
+      why:'Il peut reconstruire une patte, une partie de son cœur et même de son cerveau. Un cas unique.' },
+  ],
+  vaquita:[
+    { lvl:'small', ask:'Pourquoi le vaquita est-il en danger ?',
+      opts:['Il se prend dans les filets','Il a trop chaud'], good:0,
+      why:'Les filets de pêche posés pour un autre poisson les attrapent par accident.' },
+    { lvl:'big', ask:'Combien reste-t-il de vaquitas dans le monde aujourd’hui ?',
+      opts:['Une dizaine','Un millier','Une centaine'], good:0,
+      why:'Il en reste environ dix, tous dans un petit coin du golfe de Californie. C’est le cétacé le plus rare.' },
+  ],
+  kakapo:[
+    { lvl:'small', ask:'Comment le kakapo monte-t-il dans les arbres ?',
+      opts:['Il grimpe à pied','Il vole'], good:0,
+      why:'C’est le seul perroquet qui ne sait pas voler ! Il grimpe avec son bec et ses pattes.' },
+    { lvl:'big', ask:'Qu’est-ce qui rend le kakapo unique parmi les perroquets ?',
+      opts:['Il ne sait pas voler','Il vit dans l’eau','Il chasse la nuit'], good:0,
+      why:'Il grimpe puis se laisse tomber en planant. Chaque kakapo vivant a un nom et une équipe qui veille sur lui.' },
+  ],
+  tortue:[
+    { lvl:'small', ask:'Où la tortue luth va-t-elle pondre ses œufs ?',
+      opts:['Sur sa plage de naissance','N’importe où'], good:0,
+      why:'Elle retrouve la plage où elle est née, même 20 ans plus tard et après des milliers de kilomètres !' },
+    { lvl:'big', ask:'Qu’est-ce qui distingue la carapace de la tortue luth ?',
+      opts:['Elle est souple','Elle est transparente','Elle change de couleur'], good:0,
+      why:'Contrairement aux autres tortues, sa carapace n’est pas dure : elle est souple comme du cuir épais.' },
+  ],
+  abeille:[
+    { lvl:'small', ask:'Comment l’abeille dit-elle aux autres où sont les fleurs ?',
+      opts:['Elle danse','Elle chante'], good:0,
+      why:'Elle danse en forme de huit ! La direction de sa danse montre le chemin vers les fleurs.' },
+    { lvl:'big', ask:'Dans la danse de l’abeille, qu’indique la durée du mouvement ?',
+      opts:['La distance des fleurs','Le nombre de fleurs','La couleur des fleurs'], good:0,
+      why:'L’angle donne la direction par rapport au soleil, la durée donne la distance. C’est un vrai langage.' },
+  ],
+};
+
+/* --- Illustrations SVG originales --- */
+function art(id,col){
+  const A={
+  renard:`<path d="M50 78 Q30 74 26 54 L20 34 L36 44 Q50 38 64 44 L80 34 L74 54 Q70 74 50 78Z" fill="${col}"/>
+    <path d="M20 34 L36 44 L27 48Z" fill="#A64D13"/><path d="M80 34 L64 44 L73 48Z" fill="#A64D13"/>
+    <path d="M50 78 Q36 74 32 58 Q50 66 68 58 Q64 74 50 78Z" fill="#FDF8EC"/>
+    <circle cx="40" cy="54" r="3.6" fill="#2E2418"/><circle cx="60" cy="54" r="3.6" fill="#2E2418"/>
+    <circle cx="41.2" cy="52.8" r="1.2" fill="#fff"/><circle cx="61.2" cy="52.8" r="1.2" fill="#fff"/>
+    <ellipse cx="50" cy="66" rx="4.4" ry="3.4" fill="#2E2418"/>
+    <path d="M50 70 L50 74 M50 72 Q44 74 42 71 M50 72 Q56 74 58 71" stroke="#2E2418" stroke-width="1.6" fill="none" stroke-linecap="round"/>`,
+  hibou:`<ellipse cx="50" cy="56" rx="27" ry="30" fill="${col}"/>
+    <path d="M50 28 Q30 32 27 54 Q26 72 50 80 Q74 72 73 54 Q70 32 50 28Z" fill="#FDF8EC"/>
+    <circle cx="39" cy="52" r="8.5" fill="#2E2418"/><circle cx="61" cy="52" r="8.5" fill="#2E2418"/>
+    <circle cx="41" cy="49.5" r="2.8" fill="#fff"/><circle cx="63" cy="49.5" r="2.8" fill="#fff"/>
+    <path d="M50 58 L45 66 L50 70 L55 66Z" fill="#E0A32E"/>
+    <path d="M28 40 Q22 30 30 26 M72 40 Q78 30 70 26" stroke="${col}" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+  lynx:`<path d="M50 80 Q28 74 25 52 L22 32 L34 42 Q50 36 66 42 L78 32 L75 52 Q72 74 50 80Z" fill="${col}"/>
+    <path d="M22 32 L26 16 L32 34Z" fill="#2E2418"/><path d="M78 32 L74 16 L68 34Z" fill="#2E2418"/>
+    <path d="M50 80 Q38 74 35 58 Q50 64 65 58 Q62 74 50 80Z" fill="#FDF8EC"/>
+    <circle cx="40" cy="52" r="4" fill="#4A7C42"/><circle cx="60" cy="52" r="4" fill="#4A7C42"/>
+    <circle cx="41" cy="50.8" r="1.3" fill="#fff"/><circle cx="61" cy="50.8" r="1.3" fill="#fff"/>
+    <ellipse cx="50" cy="64" rx="4" ry="3" fill="#2E2418"/>
+    <path d="M32 60 L22 58 M32 64 L22 66 M68 60 L78 58 M68 64 L78 66" stroke="#FDF8EC" stroke-width="1.4" stroke-linecap="round"/>`,
+  loutre:`<ellipse cx="50" cy="60" rx="21" ry="25" fill="${col}"/>
+    <ellipse cx="50" cy="66" rx="14" ry="17" fill="#C4A882"/>
+    <circle cx="50" cy="36" r="15" fill="${col}"/>
+    <circle cx="38" cy="27" r="5" fill="${col}"/><circle cx="62" cy="27" r="5" fill="${col}"/>
+    <circle cx="44" cy="34" r="3.2" fill="#2E2418"/><circle cx="56" cy="34" r="3.2" fill="#2E2418"/>
+    <circle cx="45" cy="33" r="1.1" fill="#fff"/><circle cx="57" cy="33" r="1.1" fill="#fff"/>
+    <ellipse cx="50" cy="42" rx="5" ry="4" fill="#FDF8EC"/>
+    <ellipse cx="50" cy="41" rx="2.6" ry="2" fill="#2E2418"/>
+    <circle cx="50" cy="62" r="7" fill="#8B99A5"/>`,
+  pangolin:`<path d="M22 68 Q22 40 50 34 Q78 40 78 68 Q78 82 50 82 Q22 82 22 68Z" fill="${col}"/>
+    ${[0,1,2,3].map(r=>[0,1,2,3,4].map(i=>{
+      const y=44+r*10, x=30+i*10+(r%2?5:0);
+      return `<path d="M${x} ${y} q5 -6 10 0 q-5 5 -10 0Z" fill="#7A5F3A" stroke="#5E4728" stroke-width=".8"/>`;
+    }).join('')).join('')}
+    <circle cx="50" cy="30" r="10" fill="${col}"/>
+    <circle cx="46" cy="29" r="2.4" fill="#2E2418"/><circle cx="54" cy="29" r="2.4" fill="#2E2418"/>
+    <path d="M50 36 Q50 46 46 52" stroke="#D98BA8" stroke-width="2.4" fill="none" stroke-linecap="round"/>`,
+  axolotl:`<ellipse cx="50" cy="58" rx="19" ry="24" fill="${col}"/>
+    <circle cx="50" cy="38" r="16" fill="${col}"/>
+    <circle cx="43" cy="36" r="3.4" fill="#2E2418"/><circle cx="57" cy="36" r="3.4" fill="#2E2418"/>
+    <circle cx="44.2" cy="34.8" r="1.2" fill="#fff"/><circle cx="58.2" cy="34.8" r="1.2" fill="#fff"/>
+    <path d="M42 46 Q50 51 58 46" stroke="#2E2418" stroke-width="2" fill="none" stroke-linecap="round"/>
+    ${[[-1,26],[-1,34],[-1,42],[1,26],[1,34],[1,42]].map(([s,y])=>
+      `<path d="M${50+s*15} ${y} q${s*13} -5 ${s*17} 3 q${-s*6} 2 ${-s*17} -3Z" fill="#E8A8C0"/>`).join('')}
+    <ellipse cx="50" cy="80" rx="7" ry="9" fill="${col}"/>`,
+  vaquita:`<path d="M16 58 Q30 40 56 42 Q76 44 86 56 Q76 70 56 72 Q30 74 16 58Z" fill="${col}"/>
+    <path d="M16 58 Q30 66 56 68 Q74 68 86 56 Q74 70 56 72 Q30 74 16 58Z" fill="#D5DEE4"/>
+    <path d="M52 42 L58 26 L66 44Z" fill="${col}"/>
+    <path d="M86 56 L96 46 L94 62Z" fill="${col}"/>
+    <ellipse cx="34" cy="54" rx="6" ry="5" fill="#2E2418"/>
+    <circle cx="33" cy="53" r="2.4" fill="#2E2418"/><circle cx="34" cy="52" r="1" fill="#fff"/>
+    <path d="M18 62 Q24 65 30 63" stroke="#2E2418" stroke-width="1.8" fill="none" stroke-linecap="round"/>`,
+  kakapo:`<ellipse cx="50" cy="58" rx="26" ry="27" fill="${col}"/>
+    <ellipse cx="50" cy="62" rx="17" ry="19" fill="#8FAE52"/>
+    <circle cx="50" cy="34" r="17" fill="${col}"/>
+    <path d="M33 32 Q40 24 50 24 Q60 24 67 32 Q58 30 50 30 Q42 30 33 32Z" fill="#A8C46A"/>
+    <circle cx="43" cy="33" r="3.4" fill="#2E2418"/><circle cx="57" cy="33" r="3.4" fill="#2E2418"/>
+    <circle cx="44.2" cy="31.8" r="1.2" fill="#fff"/><circle cx="58.2" cy="31.8" r="1.2" fill="#fff"/>
+    <path d="M50 38 Q44 40 46 46 Q50 50 54 46 Q56 40 50 38Z" fill="#D5D0BC"/>
+    <path d="M36 46 L28 50 M36 50 L28 54 M64 46 L72 50 M64 50 L72 54" stroke="#5E7F2E" stroke-width="1.6" stroke-linecap="round"/>`,
+  tortue:`<path d="M50 26 Q80 34 82 58 Q82 78 50 82 Q18 78 18 58 Q20 34 50 26Z" fill="${col}"/>
+    ${[[50,40],[36,52],[64,52],[43,66],[57,66]].map(([x,y])=>
+      `<ellipse cx="${x}" cy="${y}" rx="8" ry="7" fill="#3A4A56" stroke="#2E3A44" stroke-width="1"/>`).join('')}
+    <path d="M18 58 Q8 54 6 62 Q10 68 20 66Z" fill="#5E7080"/>
+    <path d="M82 58 Q92 54 94 62 Q90 68 80 66Z" fill="#5E7080"/>
+    <circle cx="50" cy="20" r="9" fill="#5E7080"/>
+    <circle cx="46" cy="19" r="2.2" fill="#2E2418"/><circle cx="54" cy="19" r="2.2" fill="#2E2418"/>
+    <path d="M46 24 Q50 27 54 24" stroke="#2E2418" stroke-width="1.4" fill="none" stroke-linecap="round"/>`,
+  abeille:`<ellipse cx="50" cy="58" rx="19" ry="23" fill="${col}"/>
+    <path d="M33 48 Q50 44 67 48 L67 55 Q50 51 33 55Z" fill="#2E2418"/>
+    <path d="M32 62 Q50 58 68 62 L67 69 Q50 65 33 69Z" fill="#2E2418"/>
+    <circle cx="50" cy="32" r="13" fill="#3A3020"/>
+    <circle cx="44" cy="30" r="3.6" fill="#FDF8EC"/><circle cx="56" cy="30" r="3.6" fill="#FDF8EC"/>
+    <circle cx="44.6" cy="30.6" r="1.7" fill="#2E2418"/><circle cx="56.6" cy="30.6" r="1.7" fill="#2E2418"/>
+    <path d="M44 20 Q40 10 32 10 M56 20 Q60 10 68 10" stroke="#3A3020" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <circle cx="32" cy="10" r="2.6" fill="#3A3020"/><circle cx="68" cy="10" r="2.6" fill="#3A3020"/>
+    <ellipse cx="30" cy="48" rx="14" ry="9" fill="#BFD8E8" opacity=".72" transform="rotate(-22 30 48)"/>
+    <ellipse cx="70" cy="48" rx="14" ry="9" fill="#BFD8E8" opacity=".72" transform="rotate(22 70 48)"/>`,
+  };
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">${A[id]||''}</svg>`;
+}
+
+const RANKS=[
+  { n:0, name:'Apprenti', icon:'🔍' },
+  { n:3, name:'Pisteur', icon:'🐾' },
+  { n:5, name:'Naturaliste', icon:'🌿' },
+  { n:8, name:'Gardien', icon:'🛡️' },
+  { n:10, name:'Grand explorateur', icon:'🏅' },
+];
+
+let age='small';
+let found=[];      // ids découverts
+
+/* --- Affichage --- */
+function render(){
+  const grid=document.getElementById('cards');
+  grid.innerHTML=ANIMALS.map(a=>{
+    const has=found.includes(a.id);
+    const r=RARITY[a.rarity];
+    if(!has){
+      return '<div class="card locked" data-id="'+a.id+'" role="button" tabindex="0" aria-label="Carte non découverte">'+
+        '<div class="card-art"><div class="lock-face"><span class="q">?</span>'+
+        '<span>Réponds à sa question<br>pour la gagner</span></div></div>'+
+        '<div class="card-foot"><b>? ? ?</b><span>'+r.lbl+'</span></div></div>';
+    }
+    return '<div class="card found" data-id="'+a.id+'" role="button" tabindex="0" aria-label="Voir '+a.name+'">'+
+      '<div class="card-art">'+art(a.id,a.color)+
+      '<span class="card-rare" style="background:'+r.col+'">'+r.lbl+'</span></div>'+
+      '<div class="card-foot"><b>'+a.name+'</b><span>'+a.habitat+'</span></div></div>';
+  }).join('');
+
+  document.getElementById('pgFound').textContent=found.length;
+  document.getElementById('pgTotal').textContent=ANIMALS.length;
+  document.getElementById('pgBar').style.width=(found.length/ANIMALS.length*100)+'%';
+
+  const left=ANIMALS.length-found.length;
+  document.getElementById('pgMsg').textContent =
+    found.length===0 ? 'Réponds à ta première question pour commencer !' :
+    left===0 ? 'Bravo ! Tu as trouvé tous les animaux du carnet 🎉' :
+    left===1 ? 'Plus qu\u2019un seul animal à trouver !' :
+    'Encore '+left+' animaux à découvrir.';
+
+  // rang
+  let cur=RANKS[0], next=null;
+  RANKS.forEach(r=>{ if(found.length>=r.n) cur=r; });
+  next=RANKS.find(r=>r.n>found.length);
+  document.getElementById('rankIcon').textContent=cur.icon;
+  document.getElementById('rankName').textContent=cur.name;
+  document.getElementById('rankNext').textContent = next
+    ? 'Encore '+(next.n-found.length)+' pour devenir '+next.name
+    : 'Tu es au sommet !';
+  const span = next ? (found.length-cur.n)/(next.n-cur.n) : 1;
+  document.getElementById('rankBar').style.width=Math.min(100,span*100)+'%';
+
+}
+
+/* --- Fiche détaillée --- */
+function openSheet(id){
+  const a=ANIMALS.find(x=>x.id===id); if(!a) return;
+  const has=found.includes(id);
+  const r=RARITY[a.rarity];
+  const sheet=document.getElementById('sheet');
+  if(!has){
+    sheet.innerHTML='<div class="sheet-art" style="background:'+"#EFE3C9"+'">'+
+      '<button class="sheet-close" id="sheetX" aria-label="Fermer">✕</button>'+
+      '<div class="lock-face"><span class="q">?</span></div></div>'+
+      '<div class="sheet-body"><h3 id="sheetName">Animal inconnu</h3>'+
+      '<p class="sheet-txt">Tu n\u2019as pas encore gagné cette carte. Réponds correctement à sa question pour la découvrir !</p></div>';
+  } else {
+    sheet.innerHTML='<div class="sheet-art" style="background:'+a.color+'22">'+
+      '<button class="sheet-close" id="sheetX" aria-label="Fermer">✕</button>'+
+      art(a.id,a.color)+'</div>'+
+      '<div class="sheet-body">'+
+      '<h3 id="sheetName">'+a.name+'</h3>'+
+      '<div class="sheet-sci">'+a.sci+' · '+r.lbl+'</div>'+
+      '<p class="sheet-txt">'+(age==='small'?a.small:a.big)+'</p>'+
+      '<div class="sheet-stats">'+a.stats.map(s=>
+        '<div class="sstat"><b>'+s[0]+'</b><span>'+s[1]+'</span></div>').join('')+
+      '</div>'+
+      '<div class="sheet-wow"><b>Le savais-tu ?</b><p>'+a.wow+'</p></div>'+
+      '</div>';
+  }
+  document.getElementById('sheetVeil').classList.add('on');
+  document.getElementById('sheetX').addEventListener('click',closeSheet);
+  document.getElementById('sheetX').focus();
+}
+function closeSheet(){ document.getElementById('sheetVeil').classList.remove('on'); }
+
+document.getElementById('sheetVeil').addEventListener('click',e=>{
+  if(e.target.id==='sheetVeil') closeSheet();
+});
+addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+
+document.getElementById('cards').addEventListener('click',e=>{
+  const c=e.target.closest('.card'); if(c) openSheet(c.dataset.id);
+});
+document.getElementById('cards').addEventListener('keydown',e=>{
+  if(e.key!=='Enter' && e.key!==' ') return;
+  const c=e.target.closest('.card'); if(!c) return;
+  e.preventDefault(); openSheet(c.dataset.id);
+});
+
+const WEIGHT={ common:52, rare:28, epic:14, legend:6 };
+
+/* =====================================================================
+   MOTEUR DE QUIZ
+   Une bonne réponse débloque la carte. Trois erreurs d'affilée coûtent
+   une carte, qui redevient trouvable — la sanction est réelle sans être
+   un mur qui décourage.
+   ===================================================================== */
+const MAX_LIVES=3;
+let lives=MAX_LIVES, combo=0, curQ=null, curTarget=null, answered=false;
+
+function pickQuestion(){
+  const pool=ANIMALS.filter(a=>!found.includes(a.id));
+  if(!pool.length) return null;
+  const total=pool.reduce((s,a)=>s+WEIGHT[a.rarity],0);
+  let roll=Math.random()*total, pick=pool[0];
+  for(const a of pool){ roll-=WEIGHT[a.rarity]; if(roll<=0){ pick=a; break; } }
+  const qs=QUESTIONS[pick.id]||[];
+  const q=qs.find(x=>x.lvl===age) || qs[0];
+  return { animal:pick, q };
+}
+
+/* mélange les réponses pour que la bonne ne soit pas toujours en premier */
+function shuffled(q){
+  const arr=q.opts.map((t,i)=>({t,ok:i===q.good}));
+  for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr;
+}
+
+function renderHearts(){
+  const h=document.getElementById('hearts');
+  h.innerHTML=Array.from({length:MAX_LIVES},(_,i)=>
+    '<span class="heart'+(i<lives?'':' gone')+'">'+(i<lives?'❤️':'🤍')+'</span>').join('');
+  document.getElementById('quiz').classList.toggle('danger', lives<=1);
+  const c=document.getElementById('combo');
+  if(combo>=2){ c.textContent='🔥 '+combo+' de suite !'; c.className='combo'+(combo>=4?' hot':''); }
+  else c.textContent='';
+}
+
+function renderQuiz(){
+  const body=document.getElementById('quizBody');
+  const left=ANIMALS.length-found.length;
+  if(left===0){
+    body.innerHTML='<div class="q-card"><div class="q-ask">Carnet complet !</div>'+
+      '<p class="q-hint">Tu as répondu à toutes les questions et rencontré les 10 animaux. Bravo, explorateur !</p></div>';
+    renderHearts(); return;
+  }
+  const sel=pickQuestion();
+  if(!sel||!sel.q){ body.innerHTML=''; return; }
+  curTarget=sel.animal; curQ=sel.q; answered=false;
+  const opts=shuffled(sel.q);
+  curQ._shuffled=opts;
+
+  body.innerHTML='<div class="q-card">'+
+    '<div class="q-art">'+art(sel.animal.id,'#C9B79A')+'</div>'+
+    '<div class="q-ask">'+sel.q.ask+'</div>'+
+    '<p class="q-hint">Réponds juste pour gagner cette carte</p>'+
+    '<div class="q-opts'+(opts.length===2?' two':'')+'" id="qOpts">'+
+      opts.map((o,i)=>'<button class="opt" data-i="'+i+'">'+
+        '<span class="mk">'+String.fromCharCode(65+i)+'</span><span>'+o.t+'</span></button>').join('')+
+    '</div></div>';
+  renderHearts();
+}
+
+function answer(i){
+  if(answered) return;
+  answered=true;
+  const opts=curQ._shuffled;
+  const correct=opts[i].ok;
+  const goodIdx=opts.findIndex(o=>o.ok);
+
+  document.querySelectorAll('.opt').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===goodIdx){ b.classList.add('good'); b.querySelector('.mk').textContent='✓'; }
+    else if(idx===i && !correct){ b.classList.add('bad'); b.querySelector('.mk').textContent='✕'; }
+  });
+
+  const body=document.getElementById('quizBody');
+  let extra='';
+
+  if(correct){
+    combo++; 
+    if(lives<MAX_LIVES && combo>0 && combo%4===0){ lives++; }  // 4 bonnes d'affilée : une vie revient
+    found.push(curTarget.id);
+    extra='<div class="reward">'+art(curTarget.id,curTarget.color)+
+      '<span class="reward-txt"><b>Carte gagnée : '+curTarget.name+' !</b>'+
+      '<span>'+RARITY[curTarget.rarity].lbl+' · ajoutée à ton carnet</span></span></div>';
+    celebrate(RARITY[curTarget.rarity].col);
+  } else {
+    combo=0; lives--;
+    if(lives<=0){
+      lives=MAX_LIVES;
+      if(found.length>0){
+        const idx=Math.floor(Math.random()*found.length);
+        const lostId=found[idx];
+        const lost=ANIMALS.find(a=>a.id===lostId);
+        found.splice(idx,1);
+        extra='<div class="lost-note">'+art(lost.id,'#C9B79A')+
+          '<div><b>Tu as perdu la carte '+lost.name+'</b>'+
+          '<span>Elle est retournée dans la nature. Tu pourras la retrouver !</span></div></div>';
+      } else {
+        extra='<div class="lost-note"><div><b>Trois erreurs de suite</b>'+
+          '<span>Tes vies sont revenues. Continue, tu vas y arriver !</span></div></div>';
+      }
+    }
+  }
+
+  body.insertAdjacentHTML('beforeend',
+    '<div class="q-verdict '+(correct?'win':'lose')+'">'+
+    '<b>'+(correct?'Bravo, c’est ça !':'Presque ! La bonne réponse était : '+opts[goodIdx].t)+'</b>'+
+    '<p>'+curQ.why+'</p></div>'+ extra +
+    '<div style="text-align:center"><button class="big-btn" id="nextQ" style="margin-top:16px">'+
+    (ANIMALS.length-found.length===0?'Voir mon carnet':'Question suivante →')+'</button></div>');
+
+  render();
+  renderHearts();
+  document.getElementById('nextQ').addEventListener('click',renderQuiz);
+  document.getElementById('nextQ').focus();
+}
+
+document.getElementById('quizBody').addEventListener('click',e=>{
+  const b=e.target.closest('.opt'); if(!b||b.disabled) return;
+  answer(+b.dataset.i);
+});
+
+
+/* --- Célébration --- */
+function celebrate(col){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const pop=document.getElementById('pop');
+  const cols=[col,'#E0A32E','#4A7C42','#D4671F','#3D7A96'];
+  for(let i=0;i<34;i++){
+    const d=document.createElement('div');
+    d.className='confetti';
+    d.style.left=(Math.random()*100)+'vw';
+    d.style.top='-20px';
+    d.style.background=cols[i%cols.length];
+    d.style.animationDelay=(Math.random()*.35)+'s';
+    d.style.animationDuration=(1.1+Math.random()*.7)+'s';
+    pop.appendChild(d);
+    setTimeout(()=>d.remove(),2200);
+  }
+}
+
+/* --- Niveau de lecture --- */
+document.querySelectorAll('.age').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.age').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); age=b.dataset.age;
+    document.getElementById('footNote').innerHTML = age==='small'
+      ? 'Les informations viennent de l\u2019<a href="https://www.iucnredlist.org" target="_blank" rel="noopener">UICN</a>, les scientifiques qui surveillent les animaux. Les dessins sont originaux.'
+      : 'Les informations proviennent de l\u2019<a href="https://www.iucnredlist.org" target="_blank" rel="noopener">UICN</a>, l\u2019organisation internationale qui évalue le statut de conservation des espèces. Toutes les illustrations sont originales.';
+    // rafraîchir la fiche ouverte
+    const veil=document.getElementById('sheetVeil');
+    if(veil.classList.contains('on')){
+      const n=document.getElementById('sheetName');
+      const a=ANIMALS.find(x=>x.name===(n&&n.textContent));
+      if(a) openSheet(a.id);
+    }
+    // reposer une question au bon niveau, sauf si on vient de répondre
+    if(!answered) renderQuiz();
+  });
+});
+
+render();
+renderQuiz();
+</script>
+</body>
+</html>

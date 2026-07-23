@@ -1,0 +1,19 @@
+{
+  "name": "wildpulse",
+  "version": "1.0.0",
+  "description": "Observatoire des populations animales — suivre les courbes d'especes menacees et agir pour la conservation",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "conservation",
+    "biodiversite",
+    "especes-menacees",
+    "naturaliste",
+    "iucn"
+  ],
+  "license": "MIT"
+}
