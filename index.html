@@ -1204,7 +1204,7 @@
     <span class="lbl">Soutenir</span>
   </button>
   <div class="nav-sec">Les petits</div>
-  <a class="nav-item" href="junior.html" style="text-decoration:none">
+  <a class="nav-item" href="wildpulse-junior.html" style="text-decoration:none">
     <svg viewBox="0 0 26 14"><path class="ecg" d="M0 9 Q4 3 8 9 Q12 15 16 9 Q20 3 26 9"/><circle class="ecg-dot" cx="8" cy="9" r="2"/></svg>
     <span class="lbl">Espace enfants</span><span class="flag">Junior</span>
   </a>
@@ -5357,13 +5357,22 @@ addEventListener('keydown',e=>{ if(e.key==='Escape') navOpen(false); });
 /* la navigation par panneaux (plus bas) gère les clics du menu */
 
 /* chaque trace recoit sa longueur reelle : l'animation devient regulière
-   quelle que soit la forme de l'icone */
-navEl.querySelectorAll('.nav-item .ecg').forEach(path=>{
-  try{
-    const len = Math.ceil(path.getTotalLength());
-    if(len > 0) path.style.setProperty('--len', len);
-  }catch(e){ /* getTotalLength indisponible : la valeur par defaut s'applique */ }
-});
+   quelle que soit la forme de l'icone.
+   Mesurée après un double rAF : certains moteurs (Edge notamment) peuvent
+   renvoyer une longueur fausse si on interroge le tracé avant que la page
+   ait fini sa mise en page initiale. */
+function measureNavEcgs(){
+  navEl.querySelectorAll('.nav-item .ecg').forEach(path=>{
+    try{
+      const len = Math.ceil(path.getTotalLength());
+      if(len > 0) path.style.setProperty('--len', len);
+    }catch(e){ /* getTotalLength indisponible : la valeur par defaut s'applique */ }
+  });
+}
+requestAnimationFrame(()=>requestAnimationFrame(measureNavEcgs));
+/* filet de sécurité : si la mise en page a changé (police chargée, zoom, etc.)
+   on remesure à l'ouverture du menu, qui ne coûte rien et corrige tout résidu. */
+navBtn.addEventListener('click', ()=>requestAnimationFrame(measureNavEcgs));
 
 /* =====================================================================
    NAVIGATION PAR PANNEAUX
